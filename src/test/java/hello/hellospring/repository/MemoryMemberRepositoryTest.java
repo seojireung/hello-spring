@@ -2,15 +2,23 @@ package hello.hellospring.repository;
 
 import hello.hellospring.domain.Member;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 class MemoryMemberRepositoryTest {
 
-    MemberRepository repository = new MemoryMemberRepository();
+    MemoryMemberRepository repository = new MemoryMemberRepository();
+
+    // 테스트 끝날때마다 리포지토리 깔끔하게 지워지도록.
+    @AfterEach
+    public void afterEach() {
+        repository.clearStore();
+    }
 
     // 테스트
     // new 객체랑 db에서 꺼낸 거 같은지 비교
@@ -45,6 +53,23 @@ class MemoryMemberRepositoryTest {
         Member result = repository.findByName("spring2").get();
 
         assertThat(result).isEqualTo(member2);
+
+    }
+
+    @Test
+    public void findAll() {
+        Member member1 = new Member();
+        member1.setName("spring1");
+        repository.save(member1);
+
+        Member member2 = new Member();
+        member2.setName("spring2");
+        repository.save(member2);
+
+        List<Member> result = repository.findAll();
+
+        assertThat(result.size()).isEqualTo(2);
+
 
     }
 
