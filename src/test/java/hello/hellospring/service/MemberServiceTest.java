@@ -53,6 +53,8 @@ class MemberServiceTest {
 
         // when
         memberService.join(member1);
+        // assertThrows() : 내부에서 예외가 발생될 수 있는 코드 블록 실행 -> 예상 발생 예외 타입 일치 확인.
+        // 뒤에 로직이 실행될 때 앞의 예외가 터져야 함. ("spring" 이름 같으니까)
         IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
 
