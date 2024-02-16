@@ -1,13 +1,11 @@
 package hello.hellospring;
 
-import hello.hellospring.repository.JdbcTemplateMemberRepository;
+import hello.hellospring.repository.JpaMemberRepository;
 import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.sql.DataSource;
 
 @Configuration
 public class SpringConfig {
@@ -15,11 +13,17 @@ public class SpringConfig {
     // DataSource : 데이터베이스 커넥션을 획득할 때 사용하는 객체
     // 스프링 부트는 데이터베이스 커넥션 정보를 바탕으로 DataSource를 생성하고 스프링 빈으로 만들어 둠.
     // -> 의존성 주입 가능
-    private DataSource dataSource;
+    //private DataSource dataSource;
 
-    @Autowired
-    public SpringConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
+//    @Autowired
+//    public SpringConfig(DataSource dataSource) {
+//        this.dataSource = dataSource;
+//    }
+
+    private EntityManager em;
+
+    public SpringConfig(EntityManager em) {
+        this.em = em;
     }
 
     @Bean
@@ -33,7 +37,8 @@ public class SpringConfig {
 
         // return new MemoryMemberRepository();
         // return new JdbcMemberRepository(dataSource);
-        return new JdbcTemplateMemberRepository(dataSource);
+        // return new JdbcTemplateMemberRepository(dataSource);
+        return new JpaMemberRepository(em);
 
     }
 
