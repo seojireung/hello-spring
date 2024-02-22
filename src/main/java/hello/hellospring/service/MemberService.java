@@ -22,10 +22,20 @@ public class MemberService {
      * 회원 가입
      */
     public Long join(Member member) {
-        // 중복 회원 검증
-        validateDuplicateMember(member);
-        memberRepository.save(member);
-        return member.getId();
+
+        // aop 필요성1) 시간 측정 로직과 핵심 비즈니스 로직이 섞여 있어 유지보수 어려움.
+        //long start = System.currentTimeMillis();
+
+        //try {
+            // 중복 회원 검증
+            validateDuplicateMember(member);
+            memberRepository.save(member);
+            return member.getId();
+//        } finally {
+//            long finish = System.currentTimeMillis();
+//            long timeMs = finish - start;
+//            System.out.println("join = " + timeMs + "ms");
+//        }
     }
 
     // 메서드 길어서 따로 뽑음
@@ -42,7 +52,16 @@ public class MemberService {
      * 전체 회원 조회
      */
     public List<Member> findMembers() {
-        return memberRepository.findAll();
+        // aop 필요성2) 시간 측정 로직 변경 시 모든 로직을 찾아가면서 변경해야 하는 번거로움.
+        //long start = System.currentTimeMillis();
+
+        //try {
+            return memberRepository.findAll();
+//        } finally {
+//           long finish = System.currentTimeMillis();
+//           long timeMs = finish - start;
+//           System.out.println("find = " + timeMs + "ms");
+//        }
     }
 
     /**
